@@ -8,8 +8,7 @@ The system that is developed is a simple key-value store. The client takes user 
 
 Below is a sample execution of the client, when the server is running on the local host (hence the special loopback IP address 127.0.0.1).
 
->$ gcc client.c -o client
-
+>$ gcc client.c -o client  
 >$ ./client 127.0.0.1 5000
 
 >Connected to server
