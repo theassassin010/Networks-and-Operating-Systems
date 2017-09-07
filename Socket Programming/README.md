@@ -9,43 +9,25 @@ The system that is developed is a simple key-value store. The client takes user 
 Below is a sample execution of the client, when the server is running on the local host (hence the special loopback IP address 127.0.0.1).
 
 >$ gcc client.c -o client  
->$ ./client 127.0.0.1 5000
-
->Connected to server
-
->Enter request: put 1 2
-
->Server replied: OK
-
->Enter request: put 1 3
-
->Server replied: Key already exists
-
->Enter request put 2 3
-
->Server replied: OK
-
->Enter request: get 1
-
->Server replied: 2
-
->Enter request: del 1
-
->Server replied: OK
-
->Enter request: get 1
-
->Server replied: Key not found
-
->Enter request: del 5
-
->Server replied: Key not found
-
->Enter request: Bye
-
->Server replied: Goodbye
-
->$
+>$ ./client 127.0.0.1 5000  
+>Connected to server  
+>Enter request: put 1 2  
+>Server replied: OK  
+>Enter request: put 1 3  
+>Server replied: Key already exists  
+>Enter request put 2 3  
+>Server replied: OK  
+>Enter request: get 1  
+>Server replied: 2  
+>Enter request: del 1  
+>Server replied: OK  
+>Enter request: get 1  
+>Server replied: Key not found  
+>Enter request: del 5  
+>Server replied: Key not found  
+>Enter request: Bye  
+>Server replied: Goodbye  
+>$  
 
 Note that the server is able to communicate with multiple active clients at a time. So the server is written using event-driven I/O system call epoll
 When multiple clients talk to the server, the key-value pairs of all clients can be stored in a common data structure, and one client is able to see the data stored by the other clients.
