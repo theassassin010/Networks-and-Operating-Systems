@@ -1,0 +1,106 @@
+Only in fuse-tutorial-2016-03-25/: config.log
+Only in fuse-tutorial-2016-03-25/: config.status
+Only in fuse-tutorial-2016-03-25/example: bbfs.log
+Only in fuse-tutorial-2016-03-25/html: Makefile
+Only in fuse-tutorial-2016-03-25/: Makefile
+Only in fuse-tutorial-2016-03-25/src: bbbfs.c
+diff -r fuse-tutorial-2016-03-25/src/bbfs.c Downloads/fuse-tutorial-2016-03-25/src/bbfs.c
+45d44
+< #define HASH_SIZE 32
+83,84c82
+<     statbuf->st_size = (statbuf->st_size)*4096/(HASH_SIZE + 1);
+<     statbuf->st_blocks = statbuf->st_blocks*2;
+---
+>     
+317,329d314
+< char* subString (const char* input, int offset, int len, char* dest)
+< {
+<   int input_len = strlen (input);
+< 
+<   if (offset + len > input_len)
+<   {
+<      return NULL;
+<   }
+< 
+<   strncpy (dest, input + offset, len);
+<   return dest;
+< }
+< 
+354,381d338
+<     
+<     char hashNames[(size/4096)*(HASH_SIZE + 1)+1];
+<     int count = log_syscall("pread", pread(fi->fh, hashNames, 4096, 0), 0);
+<     hashNames[count] = '\0';
+<     if(offset/4096 >= count/(HASH_SIZE + 1)) return 0;
+<     log_msg("%s\n", hashNames);
+<     // char *hashNames = "ABCDABCDABCDABCDABCDABCDABCDABCD,ABCDABCDABCDABCDABCDABCDABCDABCD,";
+<     int i;
+<     char* tempBase = "/tmp/blockstore/";
+<     for(i = 0; i < count; i = i+(HASH_SIZE + 1)){
+<         char temp[49];
+<         int k;
+<         for(k = 0; k < 48; k++){
+<             if (k < 16)
+<                 temp[k] = tempBase[k];
+<             else
+<                 temp[k] = hashNames[i+k-16];
+<         }
+<         temp[48] = '\0';
+<         int fd = log_syscall("open", open(temp, fi->flags), 0);
+<         char buffer[4096];
+<         int d = log_syscall("pread", pread(fd, buffer, 4096, 0), 0);
+<         strncat(buf, buffer, 4096);
+<         log_syscall("close", close(fd), 0);
+<     }
+<     return size;
+< }
+< 
+383,389c340
+< void getHash(char* hash, const char* blockstr){
+<     int k;
+<     for(k = 0; k < 4096; k = k+(4096/HASH_SIZE)){
+<         hash[k*HASH_SIZE/4096] = blockstr[k];
+<     }
+<     hash[HASH_SIZE] = '\0';
+<     return;
+---
+>     return log_syscall("pread", pread(fi->fh, buf, size, offset), 0);
+412,442c363,364
+<     
+<     // char* hash [32];
+<     // getHash(hash, buf);
+<     char hashValue [HASH_SIZE + 1];
+<     getHash(hashValue, buf);
+<     char* tempBase = "/tmp/blockstore/";
+<     char temp[49];
+<     int k;
+<     for(k = 0; k < 48; k++){
+<         if (k < 16)
+<             temp[k] = tempBase[k];
+<         else
+<             temp[k] = hashValue[k-16];
+<     }
+<     temp[48] = '\0';
+<     // strcat(filename, hash);
+<     // log_msg("BAATKAR %s\n", filename);
+<     
+<     retstat = log_syscall("open", open(temp, O_CREAT | O_EXCL | O_WRONLY, 0100664), 0);
+<     if (retstat >= 0){
+<         retstat = log_syscall("close", close(retstat), 0);
+<     }
+<     else{
+<         retstat = log_syscall("mknod", mknod(temp, 0100664, 0), 0);
+<         int fd = log_syscall("open", open(temp, fi->flags), 0);
+<         log_syscall("pwrite", pwrite(fd, buf, 4096, 0), 0);
+<         log_syscall("close", close(fd), 0);
+<     }
+<     log_syscall("pwrite", pwrite(fi->fh, hashValue, HASH_SIZE, (offset*(HASH_SIZE+1))/4096), 0);
+<     log_syscall("pwrite", pwrite(fi->fh, ",", 1, ((offset*(HASH_SIZE+1))/4096) + HASH_SIZE), 0);
+<     return 4096;
+---
+> 
+>     return log_syscall("pwrite", pwrite(fi->fh, buf, size, offset), 0);
+Only in fuse-tutorial-2016-03-25/src: config.h
+Only in fuse-tutorial-2016-03-25/src: .deps
+Only in fuse-tutorial-2016-03-25/src: Makefile
+Only in fuse-tutorial-2016-03-25/src: stamp-h1
