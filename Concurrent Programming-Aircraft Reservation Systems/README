@@ -1,0 +1,44 @@
+Assignment 2 done by- 
+130050010 Suyash A. Bhatkar
+140050014 Shrey Kumar
+
+Input style:
+	The input for the 10 flights is taken from a file named "database". The inputs
+	are in the following order - Flight_name, Total_seats, Seats_booked, Status(full,
+	empty or not-full)
+	So, for example "f1 10 5 not-full" entails a flight of :
+	Flight Name - f1
+	Total Seats - 10
+	Seats booked - 5
+	Status - not-full
+
+	Similarly, the queries are taken from the file named "transactions". The format 
+	for it is similar - Query_Number, Flight_name, Operation, Number_of_Seats
+	So, for example "1 f4 cancel 4" entails a query which
+	Query Number - 1
+	Flight Name - f4
+	Operation - Cancel
+	Number_of_Seats - 4 (I set it to -1 when operation is "get_status")
+
+Shared Data:
+	We created 2 global data structures. One is a queue of a struct of type "flight_details"
+	and the other is a array of a struct of type "transaction". 
+
+	The struct flight_details contains all the details of the flight, like Flight name, 
+	total seats, seats booked, seats empty, status and also a personal lock corresponding
+	to every query
+
+	The struct transaction contains all details of the query, like query number, Flight 
+	name, operation to be performed and the number of seats. 
+
+	There is also a mapping that is maintained between the flight names and the position
+	at which it exists in the global array.
+
+Working:
+	The basic working of the code is that it first reads the database, tokenizes it and 
+	stores it in the global array. Then it takes in all the queries and updates the global
+	queue. The threads are initialised and the worker is then called. Depending upon the 
+	operation, the worker thread calls the function to do the operation.
+
+Compile Instructions:
+	Compile using - "g++ -pthread -std=c++0x master.cpp"
